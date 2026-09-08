@@ -53,7 +53,7 @@ export default function HomePage() {
                 <Link href="/auth" className="bg-brand-black text-[#F5C518] font-syne font-bold px-7 py-3.5 rounded-full text-sm hover:scale-105 transition-transform inline-flex items-center gap-2">
                   Book Now →
                 </Link>
-                <a href="https://wa.me/917008000000" className="bg-white/80 text-brand-black font-bold px-7 py-3.5 rounded-full text-sm hover:bg-white transition-colors inline-flex items-center gap-2">
+                <a href="https://wa.me/919937404945" className="bg-white/80 text-brand-black font-bold px-7 py-3.5 rounded-full text-sm hover:bg-white transition-colors inline-flex items-center gap-2">
                   WhatsApp Us
                 </a>
               </div>
@@ -125,7 +125,7 @@ export default function HomePage() {
 
       {/* WhatsApp float button */}
       <a
-        href="https://wa.me/917008000000"
+        href="https://wa.me/919937404945"
         target="_blank"
         rel="noreferrer"
         className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
