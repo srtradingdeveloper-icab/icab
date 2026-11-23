@@ -38,8 +38,8 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
 NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef
-NEXT_PUBLIC_ADMIN_EMAILS=connect.tradinghark@gmail.com
-NEXT_PUBLIC_WHATSAPP_NUMBER=917008000000
+NEXT_PUBLIC_ADMIN_EMAILS=connect.srtradingdeveloper@gmail.com
+NEXT_PUBLIC_WHATSAPP_NUMBER=9937404945
 ```
 
 ### 4. Run locally
@@ -112,3 +112,20 @@ src/
 ---
 
 Built with ❤️ for Vyasanagar, Odisha.
+import BookingWidget from "@/components/booking/BookingWidget";
+
+export default function BookingPage() {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-4">
+      <BookingWidget
+        businessPhone="9937404945"
+        onSubmit={(booking) => {
+          // ବୁକିଂ ତଥ୍ୟକୁ ସିଧା ଆପଣଙ୍କ WhatsApp କୁ ପଠାଇବା ପାଇଁ:
+          const message = `ନୂଆ ବୁକିଂ:\nନାମ: ${booking.name}\nଫୋନ୍: ${booking.phone}\nତାରିଖ: ${booking.date}\nସମୟ: ${booking.time}`;
+          const whatsappUrl = `https://wa.me{encodeURIComponent(message)}`;
+          window.open(whatsappUrl, "_blank");
+        }}
+      />
+    </main>
+  );
+}
