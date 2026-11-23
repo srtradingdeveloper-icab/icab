@@ -111,21 +111,28 @@ src/
 
 ---
 
-Built with ❤️ for Vyasanagar, Odisha.
+"use client";
+
 import BookingWidget from "@/components/booking/BookingWidget";
 
 export default function BookingPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center p-4">
+    <main className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
       <BookingWidget
-        businessPhone="9937404945"
+        businessPhone="919937404945"
         onSubmit={(booking) => {
-          // ବୁକିଂ ତଥ୍ୟକୁ ସିଧା ଆପଣଙ୍କ WhatsApp କୁ ପଠାଇବା ପାଇଁ:
-          const message = `ନୂଆ ବୁକିଂ:\nନାମ: ${booking.name}\nଫୋନ୍: ${booking.phone}\nତାରିଖ: ${booking.date}\nସମୟ: ${booking.time}`;
-          const whatsappUrl = `https://wa.me{encodeURIComponent(message)}`;
+          const message =
+            "🚕 *ନୂଆ i Cab ବୁକିଂ* 🚕\n\n" +
+            "👤 *ନାମ:* " + booking.name + "\n" +
+            "📞 *ଫୋନ୍:* " + booking.phone + "\n" +
+            "📅 *ତାରିଖ:* " + booking.date + "\n" +
+            "⏰ *ସମୟ:* " + booking.time;
+
+          const whatsappUrl = "https://wa.me/919937404945?text=" + encodeURIComponent(message);
           window.open(whatsappUrl, "_blank");
         }}
       />
     </main>
   );
 }
+abe thik achhi taa
