@@ -111,146 +111,200 @@ src/
 
 ---
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-export interface BookingPayload {
-  service: string;
-  date: string;
-  timeSlot: string;
-  customerName: string;
-  customerEmail: string;
-}
+export function BookingWidget() {
+  const [step, setStep] = useState<1 | 2>(1);
+  const [destination, setDestination] = useState("");
+  const [tripType, setTripType] = useState("One Way");
+  const [vehicle, setVehicle] = useState("Dzire");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
 
-interface BookingWidgetProps {
-  services?: string[];
-  availableSlots?: string[];
-  onBook?: (data: BookingPayload) => Promise<void>;
-}
-
-export const BookingWidget: React.FC<BookingWidgetProps> = ({
-  services = ['Consultation (30 min)', 'Full Session (60 min)', 'Follow-up (15 min)'],
-  availableSlots = ['09:00 AM', '11:00 AM', '02:00 PM', '04:30 PM'],
-  onBook,
-}) => {
-  const [formData, setFormData] = useState<BookingPayload>({
-    service: services[0] || '',
-    date: '',
-    timeSlot: availableSlots[0] || '',
-    customerName: '',
-    customerEmail: '',
-  });
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('submitting');
-    try {
-      if (onBook) {
-        await onBook(formData);
-      }
-      setStatus('success');
-    } catch {
-      setStatus('error');
+    if (!destination) {
+      alert("Please select a destination");
+      return;
     }
+    setStep(2);
   };
 
-  if (status === 'success') {
-    return (
-      <div className="p-6 max-w-md mx-auto bg-white border rounded-xl shadow-sm text-center space-y-3">
-        <h3 className="text-lg font-semibold text-emerald-600">Reservation Confirmed</h3>
-        <p className="text-sm text-gray-600">
-          Booked <strong>{formData.service}</strong> on <strong>{formData.date}</strong> at{' '}
-          <strong>{formData.timeSlot}</strong>.
-        </p>
-        <button
-          onClick={() => setStatus('idle')}
-          className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-md"
-        >
-          Book Another Slot
-        </button>
-      </div>
-    );
-  }
+  const handleConfirmWhatsApp = (e: React.FormEvent) => {
+    e.preventDefault();
+    const message =
+      "🚕 *New i Cab Booking Request* 🚕\n\n" +
+      "📍 *From:* Vyasanagar / Jajpur\n" +
+      "🏁 *Destination:* " + destination + "\n" +
+      "⇄ *Trip Type:* " + tripType + "\n" +
+      "🚗 *Vehicle:* " + vehicle + "\n" +
+      "📅 *Date:* " + date + "\n" +
+      "⏰ *Pickup Time:* " + time + "\n" +
+      "👤 *Name:* " + name + "\n" +
+      "📞 *Mobile:* " + phone + "\n\n" +
+      "Please confirm my cab booking.";
+
+    const url = "https://wa.me" + encodeURIComponent(message);
+    window.open(url, "_blank");
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 max-w-md mx-auto bg-white border rounded-xl shadow-sm space-y-4">
-      <h2 className="text-xl font-bold text-gray-900">Schedule an Appointment</h2>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Service</label>
-        <select
-          value={formData.service}
-          onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm"
-        >
-          {services.map((srv) => (
-            <option key={srv} value={srv}>{srv}</option>
-          ))}
-        </select>
+    <div className="bg-white rounded-2xl shadow-xl p-6 max-w-md w-full border border-gray-100">
+      <div className="mb-4">
+        <h3 className="text-xl font-bold text-gray-900">Book Your Ride</h3>
+        <p className="text-xs text-gray-500">From Vyasanagar · Fixed Fare · No Surge</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Date</label>
-          <input
-            type="date"
-            required
-            value={formData.date}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Time Slot</label>
-          <select
-            value={formData.timeSlot}
-            onChange={(e) => setFormData({ ...formData, timeSlot: e.target.value })}
-            className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm"
+      {step === 1 ? (
+        <form onSubmit={handleContinue} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+            <select
+              required
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm bg-white"
+            >
+              <option value="">Select destination…</option>
+              <option value="Bhubaneswar Airport">Bhubaneswar Airport</option>
+              <option value="Bhubaneswar City">Bhubaneswar City</option>
+              <option value="Cuttack">Cuttack</option>
+              <option value="Puri">Puri</option>
+              <option value="Konark">Konark</option>
+              <option value="Jajpur Local / Biraja Temple">Jajpur Local / Biraja Temple</option>
+              <option value="Kalinga Nagar">Kalinga Nagar</option>
+              <option value="Other Odisha Location">Other Odisha Location</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Trip Type</label>
+            <div className="grid grid-cols-2 gap-2">
+              {["One Way", "Round Trip"].map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => setTripType(type)}
+                  className={`py-2 px-3 rounded-lg text-sm font-medium border ${
+                    tripType === type
+                      ? "bg-amber-500 text-white border-amber-500"
+                      : "bg-gray-50 text-gray-700 border-gray-300"
+                  }`}
+                >
+                  {type === "One Way" ? "→ One Way" : "⇄ Round Trip"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle</label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { name: "Dzire", seats: "×4", icon: "🚗" },
+                { name: "Ertiga", seats: "×6", icon: "🚐" },
+                { name: "Innova", seats: "×7", icon: "🚙" },
+                { name: "SUV", seats: "×8", icon: "🛻" },
+              ].map((car) => (
+                <button
+                  key={car.name}
+                  type="button"
+                  onClick={() => setVehicle(car.name)}
+                  className={`p-2.5 rounded-lg border text-left flex items-center justify-between text-sm ${
+                    vehicle === car.name
+                      ? "border-amber-500 bg-amber-50 font-semibold"
+                      : "border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  <span>{car.icon} {car.name}</span>
+                  <span className="text-xs text-gray-500">{car.seats}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg transition"
           >
-            {availableSlots.map((slot) => (
-              <option key={slot} value={slot}>{slot}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+            Continue →
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={handleConfirmWhatsApp} className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Travel Date</label>
+              <input
+                type="date"
+                required
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg p-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Pickup Time</label>
+              <input
+                type="time"
+                required
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg p-2 text-sm"
+              />
+            </div>
+          </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Your Name</label>
-        <input
-          type="text"
-          required
-          placeholder="Alex Sharma"
-          value={formData.customerName}
-          onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm"
-        />
-      </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm"
+            />
+          </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Email</label>
-        <input
-          type="email"
-          required
-          placeholder="alex@example.com"
-          value={formData.customerEmail}
-          onChange={(e) => setFormData({ ...formData, customerEmail: e.target.value })}
-          className="mt-1 w-full rounded-md border border-gray-300 p-2 text-sm"
-        />
-      </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+            <input
+              type="tel"
+              required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Enter 10-digit mobile number"
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm"
+            />
+          </div>
 
-      {status === 'error' && (
-        <p className="text-xs text-red-600">Something went wrong. Please try again.</p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="w-1/3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg text-sm"
+            >
+              ← Back
+            </button>
+            <button
+              type="submit"
+              className="w-2/3 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition text-sm"
+            >
+              Confirm on WhatsApp →
+            </button>
+          </div>
+          <p className="text-center text-xs text-gray-500">
+            Instant booking confirmation via WhatsApp (+91 99374 04945)
+          </p>
+        </form>
       )}
-
-      <button
-        type="submit"
-        disabled={status === 'submitting'}
-        className="w-full py-2.5 px-4 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 disabled:opacity-50"
-      >
-        {status === 'submitting' ? 'Confirming...' : 'Confirm Booking'}
-      </button>
-    </form>
+    </div>
   );
-};
+}
+
+export default BookingWidget;
