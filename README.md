@@ -110,7 +110,6 @@ src/
 - WhatsApp number: update `NEXT_PUBLIC_WHATSAPP_NUMBER` in `.env.local`
 
 ---
-
 "use client";
 
 import React, { useState } from "react";
@@ -306,5 +305,8 @@ export function BookingWidget() {
     </div>
   );
 }
+
+export default BookingWidget;
+
 
 export default BookingWidget;
